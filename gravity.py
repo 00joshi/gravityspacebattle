@@ -9,11 +9,11 @@ background = pygame.Surface(screen.get_size())
 pygame.display.set_caption("PyGravity")
 pygame.key.set_repeat(10, 30)
 #Define Colors
-black   = (0,0,0)
-white   = (255,255,255)
-green   = (0,255,0)
-red     = (255,0,0)
-grey    = (128,128,128)
+black	= (0,0,0)
+white	= (255,255,255)
+green	= (0,255,0)
+red	= (255,0,0)
+grey	= (128,128,128)
 blue	= (0,0,255)
 yellow	= (255,255,0)
 violet	= (255,0,255)
@@ -53,11 +53,11 @@ class canon(pygame.sprite.Sprite):
 	def moveleft(self):
 		self.locfcenterpol += 0.05*math.pi
 		self.angle += 0.05*math.pi
-        def moveright(self):
+	def moveright(self):
 		self.locfcenterpol -= 0.05*math.pi
 		self.angle -= 0.05*math.pi
 	def update(self):
-		self.locfcenter =  pol2kart(self.locfcenterpol,self.base.radius)
+		self.locfcenter = pol2kart(self.locfcenterpol,self.base.radius)
 		self.position = self.base.position[0]+self.locfcenter[0], self.base.position[1]+self.locfcenter[1]
 		self.rect.center = self.position
 		self.drawcanon()
@@ -86,18 +86,18 @@ def pol2kart(angle,v):
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self,playername,position,angle,v0):
 		#self.canonid=canonid
-                pygame.sprite.Sprite.__init__(self)
-                self.image = pygame.Surface([5,5])
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface([5,5])
 		if playername == player:
 			self.color = violet
 		elif playername == player2:
 			self.color = yellow
-                self.rect = pygame.draw.circle(self.image,self.color,[3,3],2)
+		self.rect = pygame.draw.circle(self.image,self.color,[3,3],2)
 		self.rect.center = position
 		self.position = position
 		self.v = list(pol2kart(angle,v0))
 		self.mass = 0.1
-        def update(self,masses = list()):
+	def update(self,masses = list()):
 		deltat = 1
 		oldpos = self.position
 		newpos = self.v[0] * deltat + oldpos[0], self.v[1] * deltat + oldpos[1]
@@ -111,8 +111,8 @@ class Bullet(pygame.sprite.Sprite):
 			f[1] += m[2] * self.mass * G *(m[1]-self.position[1])/ (dist**3)
 		self.v[0] += deltat * f[0]/self.mass
 		self.v[1] += deltat * f[1]/self.mass
-		self.position = newpos		
-                self.rect.center = newpos
+		self.position = newpos
+		self.rect.center = newpos
 	def blit(self):
 		background.blit(self.image, self.rect)
 	def kill(self):
@@ -121,10 +121,10 @@ class Bullet(pygame.sprite.Sprite):
 
 class Planet(pygame.sprite.Sprite):
 	def __init__(self,position,size):
-                pygame.sprite.Sprite.__init__(self)
-                self.image = pygame.Surface([size,size])
-                self.rect = pygame.draw.circle(self.image,blue,[int(size/2),int(size/2)],int(size/2))
-                self.rect.center = position
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface([size,size])
+		self.rect = pygame.draw.circle(self.image,blue,[int(size/2),int(size/2)],int(size/2))
+		self.rect.center = position
 		self.radius=size/2
 		self.position = position
 		self.mass = 10**9*size**3
@@ -139,7 +139,7 @@ class Explosion(pygame.sprite.Sprite):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface([self.size,self.size])
 		self.image.set_colorkey((0,0,0))
-                self.image.convert_alpha()
+		self.image.convert_alpha()
 		self.rect = pygame.draw.circle(self.image,red,[self.size/2,self.size/2],self.size/2)
 		self.ttl = 5
 		self.position = position
@@ -160,10 +160,10 @@ bullets = pygame.sprite.Group()
 while done == False:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-                        done=True
-                elif event.type == pygame.KEYDOWN:
+			done=True
+		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
-        	               	done = True
+				done = True
 			if event.key == pygame.K_SPACE:
 				player.shoot()
 			elif event.key == pygame.K_UP:
