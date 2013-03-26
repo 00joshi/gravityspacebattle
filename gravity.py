@@ -95,6 +95,8 @@ class Bullet(pygame.sprite.Sprite):
 		self.rect = pygame.draw.circle(self.image,self.color,[3,3],2)
 		self.rect.center = position
 		self.position = position
+		self.image.set_colorkey((0,0,0))
+		self.image.convert_alpha()
 		self.v = list(pol2kart(angle,v0))
 		self.mass = 0.1
 	def update(self,masses = list()):
