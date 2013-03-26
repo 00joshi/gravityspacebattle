@@ -23,9 +23,12 @@ size	= (1024,768)
 done=False
 
 clock=pygame.time.Clock()
-
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
+try:
+	joystick = pygame.joystick.Joystick(0)
+	joystick.init()
+except:
+	pass
+	
 class canon(pygame.sprite.Sprite):
 	def __init__(self,id,position,basesize):
 		pygame.sprite.Sprite.__init__(self)
@@ -70,7 +73,7 @@ class canon(pygame.sprite.Sprite):
 		self.dead=1
 	def shoot(self):
 		if self.dead == 0:
-			bullets.add(Bullet(self.player,self.position,self.angle,25))
+			bullets.add(Bullet(self.player,self.position,self.angle,20))
 
 def drawenvironment():
 	background.fill(darkblue)
@@ -124,7 +127,7 @@ class Planet(pygame.sprite.Sprite):
                 self.rect.center = position
 		self.radius=size/2
 		self.position = position
-		self.mass = 10**14*size/50
+		self.mass = 10**9*size**3
 		self.image.set_colorkey((0,0,0))
 		self.image.convert_alpha()
 	def update(self):
