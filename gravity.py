@@ -36,6 +36,7 @@ class canon(pygame.sprite.Sprite):
 		self.dead=0
 		self.image.fill(red)
 		self.angle=0.0*math.pi
+		self.v0 = 20
 		self.locfcenterpol = self.angle
 		self.locfcenter = pol2kart(self.angle,basesize/2)
 		self.position = position[0]+self.locfcenter[0],position[1]+self.locfcenter[1]
@@ -47,9 +48,12 @@ class canon(pygame.sprite.Sprite):
 		list_of_planets.append(self.base)
 	def turnleft(self):
 		self.angle += 0.0125*math.pi
-#		print self.angle
 	def turnright(self):
 		self.angle -= 0.0125*math.pi
+	def faster(self):
+		self.v0 *= 1.025
+	def slower(self):
+		self.v0 /= 1.025
 	def moveleft(self):
 		self.locfcenterpol += 0.05*math.pi
 		self.angle += 0.05*math.pi
@@ -61,6 +65,7 @@ class canon(pygame.sprite.Sprite):
 		self.position = self.base.position[0]+self.locfcenter[0], self.base.position[1]+self.locfcenter[1]
 		self.rect.center = self.position
 		self.drawcanon()
+		self.drawpreview ( )
 	def drawcanon(self):
 		self.rohr = pygame.Surface([100,100])
 		self.dx, self.dy = pol2kart(self.angle,20)
@@ -68,12 +73,19 @@ class canon(pygame.sprite.Sprite):
 		self.rohr.set_colorkey((0,0,0))
 		self.rohr.convert_alpha()
 		background.blit(self.rohr,[self.position[0]-50,self.position[1]-50])
+	def drawpreview ( self ):
+		self.snapshot = pygame.Surface ( [3, 3] )
+		self.snapshot.fill ( (96, 96, 96) )
+		pos, v = self.position , pol2kart ( self.angle, self.v0 )
+		for i in range ( 25 ):
+			pos, v = gravity ( pos, v, mass = 1, delta_t = 1 )
+			background.blit ( self.snapshot, pos )
 	def kill(self):
 		self.remove(players)
 		self.dead=1
 	def shoot(self):
 		if self.dead == 0:
-			bullets.add(Bullet(self.player,self.position,self.angle,20))
+			bullets.add ( Bullet ( self.player, self.position, self.angle, self.v0 ) )
 
 def drawenvironment():
 	background.fill(darkblue)
@@ -82,6 +94,16 @@ def pol2kart(angle,v):
 	x = v * math.cos(angle)
 	y = -v * math.sin(angle)
 	return x,y
+
+def gravity ( pos = [0, 0], speed = [0, 0], mass = 1, delta_t = 1 ):
+	pos = (pos[0] + speed[0] * delta_t, pos[1] + speed[1] * delta_t)
+	f = [0,0]
+	for m in list_of_masses:
+		dist = math.sqrt ( ( m[0] - pos[0] )**2 + ( m[1] - pos[1] )**2 )
+		f[0] += m[2] * mass * G * ( m[0] - pos[0] ) / dist**3
+		f[1] += m[2] * mass * G * ( m[1] - pos[1] ) / dist**3
+	speed = (speed[0] + delta_t * f[0] / mass, speed[1] + delta_t * f[1] / mass)
+	return pos, speed
 
 class Bullet(pygame.sprite.Sprite):
 	def __init__(self,playername,position,angle,v0):
@@ -100,21 +122,11 @@ class Bullet(pygame.sprite.Sprite):
 		self.v = list(pol2kart(angle,v0))
 		self.mass = 0.1
 	def update(self,masses = list()):
-		deltat = 1
-		oldpos = self.position
-		newpos = self.v[0] * deltat + oldpos[0], self.v[1] * deltat + oldpos[1]
+		self.position, self.v = gravity ( self.position, self.v, self.mass, delta_t = 1 )
+		self.rect.center = self.position
 		if abs(self.rect.center[0]) > 5000 or abs(self.rect.center[1]) > 5000:
 			self.kill()
-		f = [0,0]
-		for m in masses:
-#			print m,self.position
-			dist = math.sqrt((m[0]-self.position[0])**2 + (m[1]-self.position[1])**2)
-			f[0] += m[2] * self.mass * G *(m[0]-self.position[0])/ (dist**3)
-			f[1] += m[2] * self.mass * G *(m[1]-self.position[1])/ (dist**3)
-		self.v[0] += deltat * f[0]/self.mass
-		self.v[1] += deltat * f[1]/self.mass
-		self.position = newpos
-		self.rect.center = newpos
+
 	def blit(self):
 		background.blit(self.image, self.rect)
 	def kill(self):
@@ -176,6 +188,11 @@ while done == False:
 				player.moveleft()
 			elif event.key == pygame.K_RIGHT:
 				player.moveright()
+			elif event.key == pygame.K_PLUS:
+				player.faster ( )
+			elif event.key == pygame.K_MINUS:
+				player.slower ( )
+			else: print event.key
 		elif event.type == pygame.JOYHATMOTION:
 			if event.value == (1,0):
 				player2.moveright()
