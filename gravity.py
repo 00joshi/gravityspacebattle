@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 import pygame
 import math
+import time
 
 pygame.init()
-size=(800,600)
+size=(1024,768)
 screen=pygame.display.set_mode(size)
 background = pygame.Surface(screen.get_size())
 pygame.display.set_caption("PyGravity")
 pygame.key.set_repeat(10, 30)
+
+#print pygame.font.get_fonts()
 #Define Colors
 black	= (0,0,0)
 white	= (255,255,255)
@@ -19,7 +22,6 @@ yellow	= (255,255,0)
 violet	= (255,0,255)
 darkblue = (0,0,33)
 G	= 6.67*10**(-11)
-size	= (1024,768)
 done=False
 
 clock=pygame.time.Clock()
@@ -28,14 +30,35 @@ try:
 	joystick.init()
 except:
 	pass
-	
+
+def winscreen(winner):
+	wonfont = pygame.font.Font(None,35)
+#	wonfont.set_bold()
+	text = winner + " has won"
+	playerwon = wonfont.render(text,True,red)
+	background.blit(playerwon, (size[0]/2-50,size[1]/2))
+def makeworld(level):
+	if level ==1:
+		list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
+		player = canon("player",[50,100],40)
+		player2 = canon("player2",[700,200],40)
+		list_of_players = player,player2
+	elif level == 2:
+		list_of_planets = [Star([size[0]/2,size[1]/2],100),]
+		player = canon("player",[50,100],40)
+		player2 = canon("player2",[700,200],40)
+		list_of_players = player,player2
+	return list_of_planets,list_of_players
 class canon(pygame.sprite.Sprite):
 	def __init__(self,id,position,basesize):
 		pygame.sprite.Sprite.__init__(self)
+		self.id = id
 		self.image = pygame.Surface([10,10])
 		self.dead=0
 		self.image.fill(red)
 		self.angle=0.0*math.pi
+		if position[0] > size[0]/2:
+			self.angle=1*math.pi
 		self.v0 = 20
 		self.locfcenterpol = self.angle
 		self.locfcenter = pol2kart(self.angle,basesize/2)
@@ -45,13 +68,14 @@ class canon(pygame.sprite.Sprite):
 		self.rect.center = self.position
 		self.list_of_bullets = list()
 		self.base = Planet(position,basesize)
-		list_of_planets.append(self.base)
+		list_of_players_planets.append(self.base)
 	def turnleft(self):
 		self.angle += 0.0125*math.pi
 	def turnright(self):
 		self.angle -= 0.0125*math.pi
 	def faster(self):
-		self.v0 *= 1.025
+		if self.v0<25:
+			self.v0 *= 1.025
 	def slower(self):
 		self.v0 /= 1.025
 	def moveleft(self):
@@ -110,9 +134,9 @@ class Bullet(pygame.sprite.Sprite):
 		#self.canonid=canonid
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface([5,5])
-		if playername == player:
+		if playername == list_of_players[0]:
 			self.color = violet
-		elif playername == player2:
+		elif playername == list_of_players[1]:
 			self.color = yellow
 		self.rect = pygame.draw.circle(self.image,self.color,[3,3],2)
 		self.rect.center = position
@@ -147,6 +171,18 @@ class Planet(pygame.sprite.Sprite):
 	def update(self):
 		background.blit(self.image, self.rect)
 
+class Star(Planet):
+	def __init__(self,position,size):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface([size,size])
+		self.rect = pygame.draw.circle(self.image,yellow,[int(size/2),int(size/2)],int(size/2))
+		self.rect.center = position
+		self.radius=size/2
+		self.position = position
+		self.mass = 10**9*size**3*2
+		self.image.set_colorkey((0,0,0))
+		self.image.convert_alpha()
+
 class Explosion(pygame.sprite.Sprite):
 	def __init__(self,position):
 		self.size = 30
@@ -164,11 +200,12 @@ class Explosion(pygame.sprite.Sprite):
 			self.kill()
 
 ###
-list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
-player = canon("player",[50,100],40)
-player2 = canon("player2",[700,200],40)
+list_of_players_planets = list()
+list_of_planets,list_of_players = makeworld(1)
+list_of_planets = list_of_planets + list_of_players_planets
 players = pygame.sprite.Group()
-players.add(player,player2)
+for p in list_of_players:
+	players.add(p)
 explosions = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
 while done == False:
@@ -179,31 +216,31 @@ while done == False:
 			if event.key == pygame.K_ESCAPE:
 				done = True
 			if event.key == pygame.K_SPACE:
-				player.shoot()
+				list_of_players[0].shoot()
 			elif event.key == pygame.K_UP:
-				player.turnleft()
+				list_of_players[0].turnleft()
 			elif event.key == pygame.K_DOWN:
-				player.turnright()
+				list_of_players[0].turnright()
 			elif event.key == pygame.K_LEFT:
-				player.moveleft()
+				list_of_players[0].moveleft()
 			elif event.key == pygame.K_RIGHT:
-				player.moveright()
+				list_of_players[0].moveright()
 			elif event.key == pygame.K_PLUS:
-				player.faster ( )
+				list_of_players[0].faster ( )
 			elif event.key == pygame.K_MINUS:
-				player.slower ( )
+				list_of_players[0].slower ( )
 			else: print event.key
 		elif event.type == pygame.JOYHATMOTION:
 			if event.value == (1,0):
-				player2.moveright()
+				list_of_players[1].moveright()
 			elif event.value == (-1,0):
-				player2.moveleft()
+				list_of_players[1].moveleft()
 			elif event.value == (0,1):
-				player2.turnleft()
+				list_of_players[1].turnleft()
 			elif event.value == (0,-1):
-				player2.turnright()
+				list_of_players[1].turnright()
 		elif event.type == pygame.JOYBUTTONDOWN:
-			player2.shoot()
+			list_of_players[1].shoot()
 	list_of_masses = list()
 	for p in list_of_planets:
 		list_of_masses.append([p.position[0],p.position[1],p.mass])
@@ -219,6 +256,11 @@ while done == False:
 	players.draw(background)
 	bullets.draw(background)
 	explosions.draw(background)
+	if len(players) == 1:
+		done = True
+		winscreen(players.sprites()[0].id)
 	screen.blit(background, (0,0))
 	clock.tick(20)
 	pygame.display.flip()
+	if done == True:
+		time.sleep(1)
