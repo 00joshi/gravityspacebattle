@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import pygame
 import math
 import time
@@ -200,7 +200,7 @@ class Explosion(pygame.sprite.Sprite):
 		self.image = pygame.Surface([self.size,self.size])
 		self.image.set_colorkey((0,0,0))
 		self.image.convert_alpha()
-		self.rect = pygame.draw.circle(self.image,red,[self.size/2,self.size/2],self.size/2)
+		self.rect = pygame.draw.circle(self.image,red,[int(self.size/2),int(self.size/2)],int(self.size/2))
 		self.ttl = 5
 		self.position = position
 		self.rect.center = self.position
@@ -242,7 +242,7 @@ while done == False:
 				list_of_players[0].faster()
 			elif event.key == pygame.K_MINUS:
 				list_of_players[0].slower()
-			else: print event.key
+			else: print(event.key)
 		elif event.type == pygame.JOYAXISMOTION:
 			if joysticks[0].get_axis(0) > 0.7:
 				list_of_players[1].moveright()
