@@ -25,28 +25,38 @@ G	= 6.67*10**(-11)
 done=False
 
 clock=pygame.time.Clock()
-try:
-	joystick = pygame.joystick.Joystick(0)
-	joystick.init()
-except:
-	pass
 
+print("Found " + str(pygame.joystick.get_count()) + " Joysticks")
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+
+for stick in joysticks:
+	stick.init()
+	print("Axis:" + str(stick.get_numaxes()))
+	print("Buttons:" + str(stick.get_numbuttons()))
+
+def menuscreen():
+	wonfont = pygame.font.Font(None,35)
+	menutitle = pygame.font.Font(None,35)
+	menuitem = pygame.font.Font(None,25)
+	srf_menutitle = wonfont.render("Menue",True,red)
+	background.blit(srf_menutitle, (100,size[1]/2))
+	return bar
 def winscreen(winner):
 	wonfont = pygame.font.Font(None,35)
 #	wonfont.set_bold()
 	text = winner + " has won"
 	playerwon = wonfont.render(text,True,red)
-	background.blit(playerwon, (size[0]/2-50,size[1]/2))
+	background.blit(playerwon, (size[0]/2-50,50))
 def makeworld(level):
 	if level ==1:
 		list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
-		player = canon("player",[50,100],40)
-		player2 = canon("player2",[700,200],40)
+		player = canon("Player 1",[50,100],40)
+		player2 = canon("Player 2",[700,200],40)
 		list_of_players = player,player2
 	elif level == 2:
 		list_of_planets = [Star([size[0]/2,size[1]/2],100),]
-		player = canon("player",[50,100],40)
-		player2 = canon("player2",[700,200],40)
+		player = canon("Player 1",[50,100],40)
+		player2 = canon("Player 2",[700,200],40)
 		list_of_players = player,player2
 	return list_of_planets,list_of_players
 class canon(pygame.sprite.Sprite):
@@ -208,6 +218,9 @@ for p in list_of_players:
 	players.add(p)
 explosions = pygame.sprite.Group()
 bullets = pygame.sprite.Group()
+list_of_masses = list()
+for p in list_of_planets:
+	list_of_masses.append([p.position[0],p.position[1],p.mass])
 while done == False:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -226,24 +239,26 @@ while done == False:
 			elif event.key == pygame.K_RIGHT:
 				list_of_players[0].moveright()
 			elif event.key == pygame.K_PLUS:
-				list_of_players[0].faster ( )
+				list_of_players[0].faster()
 			elif event.key == pygame.K_MINUS:
-				list_of_players[0].slower ( )
+				list_of_players[0].slower()
 			else: print event.key
-		elif event.type == pygame.JOYHATMOTION:
-			if event.value == (1,0):
+		elif event.type == pygame.JOYAXISMOTION:
+			if joysticks[0].get_axis(0) > 0.7:
 				list_of_players[1].moveright()
-			elif event.value == (-1,0):
+			elif joysticks[0].get_axis(0) < -0.7:
 				list_of_players[1].moveleft()
-			elif event.value == (0,1):
+			elif joysticks[0].get_axis(1) > 0.7:
 				list_of_players[1].turnleft()
-			elif event.value == (0,-1):
+			elif joysticks[0].get_axis(1) < -0.7:
 				list_of_players[1].turnright()
 		elif event.type == pygame.JOYBUTTONDOWN:
-			list_of_players[1].shoot()
-	list_of_masses = list()
-	for p in list_of_planets:
-		list_of_masses.append([p.position[0],p.position[1],p.mass])
+			if joysticks[0].get_button(0):
+				list_of_players[1].shoot()
+			elif joysticks[0].get_button(4):
+				list_of_players[1].slower()
+			elif joysticks[0].get_button(6):
+				list_of_players[1].faster()
 	bullets.update(list_of_masses)
 	explosions.update()
 	drawenvironment()
