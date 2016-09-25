@@ -1,0 +1,17 @@
+class MyWorld():
+	def
+
+def makeworld(level):
+#	global list_of_players
+#	global list_of_planets
+	if level ==1:
+		list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
+		player = canon("Player 1",[50,100],40)
+		player2 = canon("Player 2",[700,200],40)
+		list_of_players = [player,player2]
+	elif level == 2:
+		list_of_planets = [Star([size[0]/2,size[1]/2],100),]
+		player = canon("Player 1",[50,100],40)
+		player2 = canon("Player 2",[700,200],40)
+		list_of_players = [player,player2]
+	return list_of_planets,list_of_players
