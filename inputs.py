@@ -20,7 +20,7 @@ def HandleEvents (World):
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
 				World.done = True
-			if event.key == pygame.K_SPACE:
+			elif event.key == pygame.K_SPACE:
 				list_of_players[0].shoot()
 			elif event.key == pygame.K_UP:
 				list_of_players[0].turnleft()

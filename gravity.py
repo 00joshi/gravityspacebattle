@@ -71,4 +71,5 @@ while ThisWorld.done == False:
 	pygame.display.flip()
 	if ThisWorld.done == True:
 		time.sleep(1)
+print("Good Bye")
 pygame.quit()
