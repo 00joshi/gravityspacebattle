@@ -10,7 +10,9 @@ class MyWorld():
 		self.list_of_planets = list()
 		self.list_of_players = list()
 		self.players = pygame.sprite.Group()
+		self.done = True
 	def makeworld(self,level):
+		self.done = False
 		if level ==1:
 			self.list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
 			player = canon(self,"Player 1",[50,100],40)

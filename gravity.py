@@ -14,10 +14,9 @@ from MyWorld import MyWorld
 
 pygame.init()
 FindSticks()
-global list_of_masses
+#global list_of_masses
 #print pygame.font.get_fonts()
 
-done=False
 clock=pygame.time.Clock()
 
 def menuscreen():
@@ -50,7 +49,7 @@ for p in ThisWorld.list_of_players:
 for p in ThisWorld.list_of_planets:
 	ThisWorld.list_of_masses.append([p.position[0],p.position[1],p.mass])
 
-while done == False:
+while ThisWorld.done == False:
 	HandleEvents(ThisWorld)
 	ThisWorld.list_of_bullets.update(ThisWorld.list_of_masses)
 	ThisWorld.list_of_explosions.update()
@@ -65,10 +64,11 @@ while done == False:
 	ThisWorld.list_of_bullets.draw(background)
 	ThisWorld.list_of_explosions.draw(background)
 	if len(ThisWorld.players) == 1:
-		done = True
+		ThisWorld.done = True
 		winscreen(ThisWorld.players.sprites()[0].id)
 	screen.blit(background, (0,0))
 	clock.tick(20)
 	pygame.display.flip()
-	if done == True:
+	if ThisWorld.done == True:
 		time.sleep(1)
+pygame.quit()

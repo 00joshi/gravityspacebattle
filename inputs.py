@@ -19,7 +19,7 @@ def HandleEvents (World):
 			done=True
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
-				done = True
+				World.done = True
 			if event.key == pygame.K_SPACE:
 				list_of_players[0].shoot()
 			elif event.key == pygame.K_UP:
