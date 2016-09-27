@@ -19,6 +19,7 @@ class Bullet(pygame.sprite.Sprite):
 		self.image.convert_alpha()
 		self.v = list(pol2kart(angle,v0))
 		self.mass = 0.1
+		self.sound_exp = pygame.mixer.Sound('sounds/explosion.wav') # Creative Common-0 https://www.freesound.org/people/wubitog/sounds/200466/
 	def update(self,masses = list()):
 		self.position, self.v = gravity ( self.world,self.position, self.v, self.mass, delta_t = 1 )
 		self.rect.center = self.position
@@ -30,6 +31,7 @@ class Bullet(pygame.sprite.Sprite):
 	def kill(self):
 		self.remove(self.world.list_of_bullets)
 		self.world.list_of_explosions.add(Explosion(self.position))
+		self.sound_exp.play()
 
 class Explosion(pygame.sprite.Sprite):
 	def __init__(self,position):

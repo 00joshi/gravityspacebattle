@@ -24,6 +24,10 @@ class canon(pygame.sprite.Sprite):
 		self.player = self
 		self.rect.center = self.position
 		self.list_of_bullets = list()
+		self.sound_shot = pygame.mixer.Sound('sounds/pew.wav') # Creative Commons by https://www.freesound.org/people/ani_music/
+		self.sound_kill = pygame.mixer.Sound('sounds/kill.wav') # Creative Commons by https://www.freesound.org/people/Veiler/sounds/264031/
+		self.sound_exp = pygame.mixer.Sound('sounds/explosion.wav') # Creative Common-0 https://www.freesound.org/people/wubitog/sounds/200466/
+		pygame.mixer.init()
 		self.base = Planet(position,basesize)
 	def turnleft(self):
 		self.angle += 0.0125*math.pi
@@ -57,12 +61,14 @@ class canon(pygame.sprite.Sprite):
 		self.snapshot = pygame.Surface ( [3, 3] )
 		self.snapshot.fill ( (96, 96, 96) )
 		pos, v = self.position , pol2kart ( self.angle, self.v0 )
-		for i in range ( 25 ):
+		for i in range ( 15 ): # length of preview
 			pos, v = gravity ( self.world,pos, v, mass = 1, delta_t = 1 )
 			background.blit ( self.snapshot, pos )
 	def kill(self):
 		self.remove(self.world.players)
 		self.dead=1
+		self.sound_kill.play()
 	def shoot(self):
 		if self.dead == 0:
+			self.sound_shot.play()
 			self.world.list_of_bullets.add ( Bullet ( self.world, self.player, self.position, self.angle, self.v0 ) )

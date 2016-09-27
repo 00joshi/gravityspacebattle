@@ -1,9 +1,10 @@
 import pygame
 from global_defs import *
 from playerlike import *
-
+joysticks = list()
 def FindSticks ():
 	print("Found " + str(pygame.joystick.get_count()) + " Joysticks")
+	global joysticks
 	joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
 
 	for stick in joysticks:

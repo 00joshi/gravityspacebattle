@@ -11,8 +11,11 @@ from gy_math import gravity, pol2kart
 from inputs import HandleEvents, FindSticks
 from MyWorld import MyWorld
 
-
+pygame.mixer.pre_init(44100, -16, 2, 4096)
 pygame.init()
+#pygame.mixer.quit()
+#pygame.mixer.pre_init(44100, 16, 2, 4096)
+#pygame.mixer.init()
 FindSticks()
 #global list_of_masses
 #print pygame.font.get_fonts()
