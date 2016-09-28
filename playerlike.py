@@ -34,7 +34,7 @@ class canon(pygame.sprite.Sprite):
 	def turnright(self):
 		self.angle -= 0.0125*math.pi
 	def faster(self):
-		if self.v0<25:
+		if self.v0<30:
 			self.v0 *= 1.025
 	def slower(self):
 		self.v0 /= 1.025

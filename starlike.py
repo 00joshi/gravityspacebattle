@@ -24,6 +24,6 @@ class Star(Planet):
 		self.rect.center = position
 		self.radius=size/2
 		self.position = position
-		self.mass = 10**9*size**3*2
+		self.mass = 10**9*size**3*1.0
 		self.image.set_colorkey((0,0,0))
 		self.image.convert_alpha()
