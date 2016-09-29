@@ -17,9 +17,9 @@ class MyWorld():
 		self.done = False
 		self.drawenvironment()
 		if level ==1:
-			self.list_of_planets = [Planet([600,400],50),Planet([200,400],80),Planet([400,250],100)]
-			player = canon(self,"Player 1",[50,100],60)
-			player2 = canon(self,"Player 2",[700,200],60)
+			self.list_of_planets = [Planet([6/10*size[0],4/7*size[1]],50),Planet([2/10*size[0],4/8*size[1]],80),Planet([4/10*size[0],3/8*size[1]],100)]
+			player = canon(self,"Player 1",[1/10*size[0],1/8*size[1]],60)
+			player2 = canon(self,"Player 2",[7/10*size[0],2/8*size[1]],60)
 		elif level == 2:
 			self.list_of_planets = [Star([size[0]/2,size[1]/2],200),Planet([1/5*size[0],4/5*size[1]],100),Planet([4/5*size[0],1/5*size[1]],150)]
 			player = canon(self,"Player 1",[1/5*size[0],1/5*size[1]],60)
