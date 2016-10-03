@@ -19,9 +19,7 @@ class MyWorld():
 		self.drawenvironment()
 		if level == 0:
 			psize = randrange(50,100)
-			player = canon(self,"Player 1",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)
-			player2 = canon(self,"Player 2",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)
-			self.list_of_players = [player,player2]
+			list_of_players = [canon(self,"Player 1",[randrange(100,size[0],100),randrange(100,size[1],100)],psize),canon(self,"Player 2",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)]
 			for i in range(10):
 				iplanet = Planet([randrange(100,size[0]-100,100),randrange(100,size[1]-100,100)],randrange(10,150))
 				if pygame.sprite.spritecollide(iplanet,self.list_of_planets, True, pygame.sprite.collide_circle):
@@ -34,15 +32,12 @@ class MyWorld():
 
 		if level ==1:
 			self.list_of_planets = [Planet([6/10*size[0],4/7*size[1]],50),Planet([2/10*size[0],4/8*size[1]],80),Planet([4/10*size[0],3/8*size[1]],100)]
-			player = canon(self,"Player 1",[1/10*size[0],1/8*size[1]],60)
-			player2 = canon(self,"Player 2",[7/10*size[0],2/8*size[1]],60)
+			self.list_of_players = [canon(self,"Player 1",[1/10*size[0],1/8*size[1]],60),canon(self,"Player 2",[7/10*size[0],2/8*size[1]],60)]
 		elif level == 2:
 			self.list_of_planets = [Star([size[0]/2,size[1]/2],200),Planet([1/5*size[0],4/5*size[1]],100),Planet([4/5*size[0],1/5*size[1]],150)]
-			player = canon(self,"Player 1",[1/5*size[0],1/5*size[1]],60)
-			player2 = canon(self,"Player 2",[4/5*size[0],4/5*size[1]],60)
-		self.list_of_players = [player,player2]
-		self.list_of_planets.add(player.base)
-		self.list_of_planets.add(player2.base)
+			list_of_players = [canon(self,"Player 1",[1/5*size[0],1/5*size[1]],60), canon(self,"Player 2",[4/5*size[0],4/5*size[1]],60)]
+		for player in list_of_players: 
+			self.list_of_planets.add(player.base)
 		
 		for p in self.list_of_players:
 			self.players.add(p)
@@ -57,4 +52,3 @@ class MyWorld():
 		self.players.update()
 		if len(self.players)<2:
 			self.done = True
-#	return list_of_planets,list_of_players
