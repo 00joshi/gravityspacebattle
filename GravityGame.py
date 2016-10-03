@@ -9,7 +9,7 @@ class GravityGame():
 	def __init__(self):
 		self.clock=pygame.time.Clock()
 		self.ThisWorld = MyWorld()
-		self.ThisWorld.makeworld(1)
+		self.ThisWorld.makeworld(0)
 	def run(self):
 		while self.ThisWorld.done == False:
 			HandleEvents(self.ThisWorld)
