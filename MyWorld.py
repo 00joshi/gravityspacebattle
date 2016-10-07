@@ -19,16 +19,15 @@ class MyWorld():
 		self.drawenvironment()
 		if level == 0:
 			psize = randrange(50,100)
-			list_of_players = [canon(self,"Player 1",[randrange(100,size[0],100),randrange(100,size[1],100)],psize),canon(self,"Player 2",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)]
+			self.list_of_players = [canon(self,"Player 1",[randrange(100,size[0],100),randrange(100,size[1],100)],psize),canon(self,"Player 2",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)]
 			for i in range(10):
 				iplanet = Planet([randrange(100,size[0]-100,100),randrange(100,size[1]-100,100)],randrange(10,150))
 				if pygame.sprite.spritecollide(iplanet,self.list_of_planets, True, pygame.sprite.collide_circle):
 					i-=1
 				self.list_of_planets.add(iplanet)
-				if pygame.sprite.spritecollide(player.base,self.list_of_planets, True, pygame.sprite.collide_circle):
-					i-=1
-				if pygame.sprite.spritecollide(player2.base,self.list_of_planets, True, pygame.sprite.collide_circle):
-					i-=1
+				for player in self.list_of_players:
+					if pygame.sprite.spritecollide(player.base,self.list_of_planets, True, pygame.sprite.collide_circle):
+						i-=1
 
 		if level ==1:
 			self.list_of_planets = [Planet([6/10*size[0],4/7*size[1]],50),Planet([2/10*size[0],4/8*size[1]],80),Planet([4/10*size[0],3/8*size[1]],100)]
@@ -36,7 +35,7 @@ class MyWorld():
 		elif level == 2:
 			self.list_of_planets = [Star([size[0]/2,size[1]/2],200),Planet([1/5*size[0],4/5*size[1]],100),Planet([4/5*size[0],1/5*size[1]],150)]
 			list_of_players = [canon(self,"Player 1",[1/5*size[0],1/5*size[1]],60), canon(self,"Player 2",[4/5*size[0],4/5*size[1]],60)]
-		for player in list_of_players: 
+		for player in self.list_of_players: 
 			self.list_of_planets.add(player.base)
 		
 		for p in self.list_of_players:
