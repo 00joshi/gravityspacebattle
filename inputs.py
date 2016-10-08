@@ -38,17 +38,31 @@ def HandleEvents (World):
 			else: print(event.key)
 		elif event.type == pygame.JOYAXISMOTION:
 			if joysticks[0].get_axis(0) > 0.7:
-				list_of_players[1].moveright()
+				list_of_players[0].moveright()
 			elif joysticks[0].get_axis(0) < -0.7:
-				list_of_players[1].moveleft()
+				list_of_players[0].moveleft()
 			elif joysticks[0].get_axis(1) > 0.7:
-				list_of_players[1].turnleft()
+				list_of_players[0].turnleft()
 			elif joysticks[0].get_axis(1) < -0.7:
+				list_of_players[0].turnright()
+			elif joysticks[1].get_axis(0) > 0.7:
+				list_of_players[1].moveright()
+			elif joysticks[1].get_axis(0) < -0.7:
+				list_of_players[1].moveleft()
+			elif joysticks[1].get_axis(1) > 0.7:
+				list_of_players[1].turnleft()
+			elif joysticks[1].get_axis(1) < -0.7:
 				list_of_players[1].turnright()
 		elif event.type == pygame.JOYBUTTONDOWN:
 			if joysticks[0].get_button(0):
-				list_of_players[1].shoot()
+				list_of_players[0].shoot()
 			elif joysticks[0].get_button(4):
-				list_of_players[1].slower()
+				list_of_players[0].slower()
 			elif joysticks[0].get_button(6):
+				list_of_players[0].faster()
+			elif joysticks[1].get_button(0):
+				list_of_players[1].shoot()
+			elif joysticks[1].get_button(4):
+				list_of_players[1].slower()
+			elif joysticks[1].get_button(6):
 				list_of_players[1].faster()

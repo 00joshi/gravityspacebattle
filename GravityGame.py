@@ -4,11 +4,13 @@ from MyWorld import MyWorld
 from screens import winscreen,messagescreen
 from inputs import HandleEvents
 from global_defs import *
+from colors import *
 
 class GravityGame():
 	def __init__(self):
+		self.playerscolors = ColorCollection()
 		self.clock=pygame.time.Clock()
-		self.ThisWorld = MyWorld()
+		self.ThisWorld = MyWorld(self)
 		self.ThisWorld.makeworld(0)
 	def run(self):
 		while self.ThisWorld.done == False:
@@ -25,6 +27,7 @@ class GravityGame():
 			screen.blit(background, (0,0))
 			self.clock.tick(20)
 			pygame.display.flip()
+		self.playerscolors.reset()
 		if len(self.ThisWorld.players)<2:
 			# assuming we have some winner now that the game is over
 			wscreen = winscreen(self.ThisWorld.players.sprites()[0].id)

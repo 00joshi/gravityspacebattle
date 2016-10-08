@@ -2,9 +2,11 @@ import pygame
 from playerlike import *
 from starlike import *
 from random import randrange
-class MyWorld():
+import colors
+import global_defs
+class MyWorld(object):
 	# Lists
-	def __init__(self):
+	def __init__(self,game):
 		self.list_of_explosions = pygame.sprite.Group()
 		self.list_of_bullets = pygame.sprite.Group()
 		self.list_of_masses = list()
@@ -12,6 +14,7 @@ class MyWorld():
 		self.list_of_players = list()
 		self.players = pygame.sprite.Group()
 		self.done = True
+		self.game = game
 	def drawenvironment(self):
 		background.fill(darkblue)
 	def makeworld(self,level):
@@ -19,7 +22,7 @@ class MyWorld():
 		self.drawenvironment()
 		if level == 0:
 			psize = randrange(50,100)
-			self.list_of_players = [canon(self,"Player 1",[randrange(100,size[0],100),randrange(100,size[1],100)],psize),canon(self,"Player 2",[randrange(100,size[0],100),randrange(100,size[1],100)],psize)]
+			self.list_of_players = [canon(self,"Player 1",self.game.playerscolors.pop(),[randrange(100,size[0],100),randrange(100,size[1],100)],psize),canon(self,"Player 2",self.game.playerscolors.pop(),[randrange(100,size[0],100),randrange(100,size[1],100)],psize)]
 			for i in range(10):
 				iplanet = Planet([randrange(100,size[0]-100,100),randrange(100,size[1]-100,100)],randrange(10,150))
 				if pygame.sprite.spritecollide(iplanet,self.list_of_planets, True, pygame.sprite.collide_circle):

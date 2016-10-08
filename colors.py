@@ -8,3 +8,14 @@ blue	= (0,0,255)
 yellow	= (255,255,0)
 violet	= (255,0,255)
 darkblue = (0,0,33)
+
+
+class ColorCollection(object):
+	colors = [red, green, grey, yellow, violet]
+	def init():
+		self.colors = [red, green, grey, yellow, violet]
+	def pop(self):
+		return(self.colors.pop())
+	def reset(self):
+		self.colors.clear()
+		self.colors.extend([red, green, grey, yellow, violet])

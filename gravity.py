@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 import menu
 import sys
-
+import colors
 from GravityGame import GravityGame
 from inputs import FindSticks
 

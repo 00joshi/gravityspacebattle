@@ -6,13 +6,15 @@ from gy_math import pol2kart, gravity
 from starlike import Planet
 from bulletlike import *
 class canon(pygame.sprite.Sprite):
-	def __init__(self,world,id,position,basesize):
+	global playercolors
+	def __init__(self,world,id,color,position,basesize):
+		self.color = color
 		pygame.sprite.Sprite.__init__(self)
 		self.world = world
 		self.id = id
 		self.image = pygame.Surface([10,10])
 		self.dead=0
-		self.image.fill(red)
+		self.image.fill(self.color)
 		self.angle=0.0*math.pi
 		if position[0] > size[0]/2:
 			self.angle=1*math.pi
@@ -53,7 +55,7 @@ class canon(pygame.sprite.Sprite):
 	def drawcanon(self):
 		self.rohr = pygame.Surface([100,100])
 		self.dx, self.dy = pol2kart(self.angle,20)
-		self.rohrrect = pygame.draw.line(self.rohr,red,[50,50],[self.dx+50,self.dy+50])
+		self.rohrrect = pygame.draw.line(self.rohr,self.color,[50,50],[self.dx+50,self.dy+50])
 		self.rohr.set_colorkey((0,0,0))
 		self.rohr.convert_alpha()
 		background.blit(self.rohr,[self.position[0]-50,self.position[1]-50])
